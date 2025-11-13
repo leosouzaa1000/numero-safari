@@ -28,10 +28,12 @@ const Index = () => {
       
       if (selectedPhase === 5) {
         setCurrentScreen('certificate');
+        setSelectedPhase(null);
       } else {
-        setCurrentScreen('menu');
+        // Avança automaticamente para a próxima fase
+        const nextPhase = (selectedPhase + 1) as GamePhase;
+        setSelectedPhase(nextPhase);
       }
-      setSelectedPhase(null);
     }
   };
 
