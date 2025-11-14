@@ -22,9 +22,16 @@ export function PhaseScreen({ phase, onComplete, onBack }: PhaseScreenProps) {
   const [showConfetti, setShowConfetti] = useState(false);
   const { speak, playSound } = useSpeech();
   
+  console.log('PhaseScreen rendered with phase:', phase?.id, 'step:', step);
+  
   // Safety check
   if (!phase || !phase.range) {
-    return null;
+    console.error('Invalid phase data:', phase);
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Button onClick={onBack}>Voltar ao Menu</Button>
+      </div>
+    );
   }
   
   const numbers = Array.from(
