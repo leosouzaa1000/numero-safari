@@ -27,6 +27,12 @@ export function PhaseScreen({ phase, onComplete, onBack }: PhaseScreenProps) {
     (_, i) => phase.range.start + i
   );
 
+  // Reset step when phase changes
+  useEffect(() => {
+    setStep('learn');
+    setShowConfetti(false);
+  }, [phase.id]);
+
   useEffect(() => {
     if (step === 'learn') {
       setTimeout(() => {
