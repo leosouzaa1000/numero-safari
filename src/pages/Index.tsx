@@ -24,17 +24,20 @@ const Index = () => {
 
   const handlePhaseComplete = () => {
     if (selectedPhase) {
+      console.log('Completing phase:', selectedPhase);
       completePhase(selectedPhase);
       
       if (selectedPhase === 5) {
+        console.log('Game completed! Going to certificate');
         setTimeout(() => {
           setCurrentScreen('certificate');
           setSelectedPhase(null);
         }, 100);
       } else {
-        // Avança automaticamente para a próxima fase com pequeno delay
+        // Avança automaticamente para a próxima fase
+        const nextPhase = (selectedPhase + 1) as GamePhase;
+        console.log('Advancing to next phase:', nextPhase);
         setTimeout(() => {
-          const nextPhase = (selectedPhase + 1) as GamePhase;
           setSelectedPhase(nextPhase);
         }, 100);
       }
@@ -61,13 +64,21 @@ const Index = () => {
   if (currentScreen === 'phase' && selectedPhase) {
     const phaseConfig = progress.phases[selectedPhase];
     
+    console.log('Rendering phase screen:', selectedPhase, phaseConfig);
+    
     // Safety check: only render if phase exists
     if (!phaseConfig) {
-      return null;
+      console.error('Phase config not found for phase:', selectedPhase);
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <Button onClick={handleBackToMenu}>Voltar ao Menu</Button>
+        </div>
+      );
     }
     
     return (
       <PhaseScreen
+        key={selectedPhase}
         phase={phaseConfig}
         onComplete={handlePhaseComplete}
         onBack={handleBackToMenu}
