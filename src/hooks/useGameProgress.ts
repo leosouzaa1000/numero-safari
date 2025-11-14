@@ -19,7 +19,24 @@ const initialProgress: GameProgress = {
 export function useGameProgress() {
   const [progress, setProgress] = useState<GameProgress>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : initialProgress;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        // Merge saved progress with initial to ensure all phases exist
+        return {
+          ...initialProgress,
+          ...parsed,
+          phases: {
+            ...initialProgress.phases,
+            ...parsed.phases,
+          },
+        };
+      } catch (error) {
+        console.error('Error loading progress:', error);
+        return initialProgress;
+      }
+    }
+    return initialProgress;
   });
 
   useEffect(() => {
@@ -29,12 +46,17 @@ export function useGameProgress() {
   const completePhase = (phase: GamePhase) => {
     setProgress((prev) => {
       const newPhases = { ...prev.phases };
-      newPhases[phase].completed = true;
-      newPhases[phase].crystals = 1;
+      
+      // Safely update current phase
+      if (newPhases[phase]) {
+        newPhases[phase].completed = true;
+        newPhases[phase].crystals = 1;
+      }
 
-      // Unlock next phase
-      if (phase < 5) {
-        newPhases[(phase + 1) as GamePhase].unlocked = true;
+      // Unlock next phase if it exists
+      const nextPhase = (phase + 1) as GamePhase;
+      if (phase < 5 && newPhases[nextPhase]) {
+        newPhases[nextPhase].unlocked = true;
       }
 
       const totalCrystals = Object.values(newPhases).reduce((sum, p) => sum + p.crystals, 0);
