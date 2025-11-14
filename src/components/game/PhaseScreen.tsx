@@ -22,6 +22,11 @@ export function PhaseScreen({ phase, onComplete, onBack }: PhaseScreenProps) {
   const [showConfetti, setShowConfetti] = useState(false);
   const { speak, playSound } = useSpeech();
   
+  // Safety check
+  if (!phase || !phase.range) {
+    return null;
+  }
+  
   const numbers = Array.from(
     { length: phase.range.end - phase.range.start + 1 },
     (_, i) => phase.range.start + i

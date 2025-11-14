@@ -27,12 +27,16 @@ const Index = () => {
       completePhase(selectedPhase);
       
       if (selectedPhase === 5) {
-        setCurrentScreen('certificate');
-        setSelectedPhase(null);
+        setTimeout(() => {
+          setCurrentScreen('certificate');
+          setSelectedPhase(null);
+        }, 100);
       } else {
-        // Avança automaticamente para a próxima fase
-        const nextPhase = (selectedPhase + 1) as GamePhase;
-        setSelectedPhase(nextPhase);
+        // Avança automaticamente para a próxima fase com pequeno delay
+        setTimeout(() => {
+          const nextPhase = (selectedPhase + 1) as GamePhase;
+          setSelectedPhase(nextPhase);
+        }, 100);
       }
     }
   };
@@ -55,9 +59,16 @@ const Index = () => {
   }
 
   if (currentScreen === 'phase' && selectedPhase) {
+    const phaseConfig = progress.phases[selectedPhase];
+    
+    // Safety check: only render if phase exists
+    if (!phaseConfig) {
+      return null;
+    }
+    
     return (
       <PhaseScreen
-        phase={progress.phases[selectedPhase]}
+        phase={phaseConfig}
         onComplete={handlePhaseComplete}
         onBack={handleBackToMenu}
       />
