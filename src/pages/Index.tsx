@@ -23,25 +23,26 @@ const Index = () => {
   };
 
   const handlePhaseComplete = () => {
-    if (selectedPhase) {
-      console.log('Completing phase:', selectedPhase);
-      completePhase(selectedPhase);
-      
+    if (!selectedPhase) return;
+    
+    console.log('handlePhaseComplete called for phase:', selectedPhase);
+    
+    // Complete the phase first
+    completePhase(selectedPhase);
+    
+    // Wait for state update before transitioning
+    setTimeout(() => {
       if (selectedPhase === 5) {
         console.log('Game completed! Going to certificate');
-        setTimeout(() => {
-          setCurrentScreen('certificate');
-          setSelectedPhase(null);
-        }, 100);
+        setCurrentScreen('certificate');
+        setSelectedPhase(null);
       } else {
-        // Avança automaticamente para a próxima fase
+        // Advance to next phase
         const nextPhase = (selectedPhase + 1) as GamePhase;
         console.log('Advancing to next phase:', nextPhase);
-        setTimeout(() => {
-          setSelectedPhase(nextPhase);
-        }, 100);
+        setSelectedPhase(nextPhase);
       }
-    }
+    }, 500);
   };
 
   const handleBackToMenu = () => {
