@@ -30,19 +30,23 @@ const Index = () => {
     // Complete the phase first
     completePhase(selectedPhase);
     
-    // Wait for state update before transitioning
-    setTimeout(() => {
-      if (selectedPhase === 5) {
-        console.log('Game completed! Going to certificate');
+    // Check if this is the final phase
+    if (selectedPhase === 5) {
+      console.log('Game completed! Going to certificate');
+      setTimeout(() => {
         setCurrentScreen('certificate');
         setSelectedPhase(null);
-      } else {
-        // Advance to next phase
-        const nextPhase = (selectedPhase + 1) as GamePhase;
-        console.log('Advancing to next phase:', nextPhase);
+      }, 500);
+    } else {
+      // Automatically advance to next phase - ensure numeric addition
+      const nextPhaseNum = Number(selectedPhase) + 1;
+      const nextPhase = nextPhaseNum as GamePhase;
+      console.log('Auto-advancing to next phase:', nextPhase);
+      
+      setTimeout(() => {
         setSelectedPhase(nextPhase);
-      }
-    }, 500);
+      }, 100);
+    }
   };
 
   const handleBackToMenu = () => {
