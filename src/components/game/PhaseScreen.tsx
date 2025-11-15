@@ -81,13 +81,18 @@ export function PhaseScreen({ phase, onComplete, onBack }: PhaseScreenProps) {
   const handleContinue = () => {
     setShowCelebration(false);
     setShowConfetti(false);
-    onComplete();
+    setTimeout(() => onComplete(), 100);
   };
 
   const handleBackToMenu = () => {
     setShowCelebration(false);
     setShowConfetti(false);
-    onBack();
+    // Complete the phase first, then go back to menu
+    setTimeout(() => {
+      onComplete();
+      // Wait a bit more to ensure state is saved
+      setTimeout(() => onBack(), 200);
+    }, 100);
   };
 
   return (
