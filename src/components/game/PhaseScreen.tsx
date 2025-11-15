@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Confetti } from './Confetti';
 
-type PhaseStep = 'learn' | 'find' | 'sequence' | 'complete' | 'finished';
+type PhaseStep = 'learn' | 'find' | 'sequence' | 'complete';
 
 interface PhaseScreenProps {
   phase: PhaseConfig;
@@ -64,14 +64,15 @@ export function PhaseScreen({ phase, onComplete, onBack }: PhaseScreenProps) {
     } else if (step === 'sequence') {
       setStep('complete');
     } else if (step === 'complete') {
+      // Show quick celebration and move to next phase
       setShowConfetti(true);
       playSound('complete');
-      speak('Parabéns! Você ganhou um cristal mágico!');
-      setStep('finished');
+      speak('Parabéns! Cristal conquistado!');
+      
       setTimeout(() => {
         setShowConfetti(false);
         onComplete();
-      }, 3000);
+      }, 1500); // Reduced time for faster flow
     }
   };
 
@@ -130,20 +131,6 @@ export function PhaseScreen({ phase, onComplete, onBack }: PhaseScreenProps) {
 
       {step === 'complete' && (
         <CompleteSequence numbers={numbers} onComplete={handleMiniGameComplete} />
-      )}
-
-      {step === 'finished' && (
-        <div className="flex flex-col items-center justify-center min-h-screen gap-8">
-          <h1 className="text-6xl font-black text-foreground text-center animate-bounce">
-            🎉 PARABÉNS! 🎉
-          </h1>
-          <p className="text-3xl text-foreground text-center">
-            Você ganhou um Cristal Mágico!
-          </p>
-          <div className="w-32 h-32 bg-gradient-to-br from-game-sun to-game-orange rounded-full animate-pulse shadow-2xl flex items-center justify-center text-6xl">
-            💎
-          </div>
-        </div>
       )}
     </div>
   );

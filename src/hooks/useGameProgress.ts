@@ -77,9 +77,11 @@ export function useGameProgress() {
         console.log('Phase marked as completed:', phase, newPhases[phase]);
       }
 
-      // Unlock next phase if it exists
-      const nextPhase = (phase + 1) as GamePhase;
-      if (phase < 5 && newPhases[nextPhase]) {
+      // Unlock next phase if it exists - ensure we're working with numbers
+      const nextPhaseNum = Number(phase) + 1;
+      const nextPhase = nextPhaseNum as GamePhase;
+      
+      if (nextPhaseNum <= 5 && newPhases[nextPhase]) {
         newPhases[nextPhase] = {
           ...newPhases[nextPhase],
           unlocked: true,
@@ -93,7 +95,7 @@ export function useGameProgress() {
       const newProgress = {
         ...prev,
         phases: newPhases,
-        currentPhase: phase < 5 ? nextPhase : phase,
+        currentPhase: nextPhaseNum <= 5 ? nextPhase : phase,
         totalCrystals,
         completedGame,
       };
